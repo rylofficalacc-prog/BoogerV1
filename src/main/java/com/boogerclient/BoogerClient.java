@@ -32,15 +32,11 @@ public class BoogerClient implements ClientModInitializer {
     public void onInitializeClient() {
         LOGGER.info("Booger Client initializing...");
 
-        // Load config
         config = BoogerConfig.load();
-
-        // Init managers
         hudManager = new HudManager();
         pvpManager = new PvpManager();
         cosmeticsManager = new CosmeticsManager();
 
-        // Register keybinds
         openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.boogerclient.menu",
             InputUtil.Type.KEYSYM,
@@ -55,15 +51,12 @@ public class BoogerClient implements ClientModInitializer {
             "category.boogerclient"
         ));
 
-        // Register HUD rendering — Fabric API 0.135+ uses RenderTickCounter
         HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
-            hudManager.render(drawContext, tickCounter.getTickDelta(true));
+            hudManager.render(drawContext, tickCounter.getTickDelta(false));
         });
 
-        // Register tick events
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             pvpManager.tick(client);
-
             if (openMenuKey.wasPressed()) {
                 client.setScreen(new com.boogerclient.gui.BoogerMenuScreen());
             }
@@ -72,6 +65,6 @@ public class BoogerClient implements ClientModInitializer {
             }
         });
 
-        LOGGER.info("Booger Client initialized. Press RIGHT_SHIFT to open menu, F6 to edit HUD.");
+        LOGGER.info("Booger Client initialized.");
     }
 }
