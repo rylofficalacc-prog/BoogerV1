@@ -3,18 +3,14 @@ package com.boogerclient.hud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
-/**
- * Base class for all draggable HUD elements.
- */
 public abstract class HudElement {
 
     protected String id;
     protected String displayName;
-    protected float x; // 0.0 – 1.0 fraction of screen width
-    protected float y; // 0.0 – 1.0 fraction of screen height
+    protected float x;
+    protected float y;
     protected boolean visible = true;
 
-    // Drag state (only used during edit mode)
     protected boolean dragging = false;
     protected float dragOffsetX, dragOffsetY;
 
@@ -25,10 +21,8 @@ public abstract class HudElement {
         this.y = defaultY;
     }
 
-    /** Render the element in normal gameplay. */
     public abstract void render(DrawContext ctx, MinecraftClient client, float tickDelta);
 
-    /** Render the element's drag handle in edit mode. */
     public void renderEditHandle(DrawContext ctx, MinecraftClient client) {
         int sw = client.getWindow().getScaledWidth();
         int sh = client.getWindow().getScaledHeight();
@@ -37,21 +31,24 @@ public abstract class HudElement {
         int w = getWidth(client);
         int h = getHeight(client);
 
-        // Background box
         ctx.fill(px - 2, py - 2, px + w + 2, py + h + 2, 0x88000000);
-        // Border
-        ctx.drawBorder(px - 2, py - 2, w + 4, h + 4, dragging ? 0xFFFFAA00 : 0xFFFFFFFF);
-        // Label
+        int borderColor = dragging ? 0xFFFFAA00 : 0xFFFFFFFF;
+        drawBorder(ctx, px - 2, py - 2, w + 4, h + 4, borderColor);
         ctx.drawText(client.textRenderer, displayName, px, py, 0xFFFFFF, false);
+    }
+
+    protected void drawBorder(DrawContext ctx, int x, int y, int w, int h, int color) {
+        ctx.fill(x,         y,         x + w, y + 1,     color);
+        ctx.fill(x,         y + h - 1, x + w, y + h,     color);
+        ctx.fill(x,         y,         x + 1, y + h,     color);
+        ctx.fill(x + w - 1, y,         x + w, y + h,     color);
     }
 
     public int getWidth(MinecraftClient client) {
         return client.textRenderer.getWidth(getValueText()) + 4;
     }
 
-    public int getHeight(MinecraftClient client) {
-        return 10;
-    }
+    public int getHeight(MinecraftClient client) { return 10; }
 
     protected String getValueText() { return displayName; }
 
@@ -85,7 +82,6 @@ public abstract class HudElement {
 
     public void stopDrag() { dragging = false; }
 
-    // Getters / setters
     public String getId() { return id; }
     public String getDisplayName() { return displayName; }
     public float getX() { return x; }
