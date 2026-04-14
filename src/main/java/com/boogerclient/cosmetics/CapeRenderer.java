@@ -12,10 +12,6 @@ import org.joml.Matrix4f;
 
 public class CapeRenderer {
 
-    /**
-     * Renders a cape for the given player using the provided texture.
-     * The cape is rendered as a quad behind the player, swinging based on movement.
-     */
     public static void render(MatrixStack matrices,
                                VertexConsumerProvider vertexConsumers,
                                int light,
@@ -23,31 +19,25 @@ public class CapeRenderer {
                                AbstractClientPlayerEntity player) {
 
         matrices.push();
-
-        // Position behind the player's back
         matrices.translate(0.0, 0.0, 0.125);
 
-        // Cape swing based on player velocity
-        double dx = player.getX() - player.prevX;
-        double dz = player.getZ() - player.prevZ;
+        double dx = player.getX() - player.lastRenderX;
+        double dz = player.getZ() - player.lastRenderZ;
         float swingAngle = (float) Math.sqrt(dx * dx + dz * dz) * 10.0f;
         swingAngle = MathHelper.clamp(swingAngle, 0.0f, 20.0f);
 
-        // Cape flap based on y movement
-        float flapAngle = (float)(player.getY() - player.prevY) * -5.0f;
+        float flapAngle = (float)(player.getY() - player.lastRenderY) * -5.0f;
 
         matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X
             .rotationDegrees(6.0f + swingAngle * 0.5f + flapAngle));
         matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Z
             .rotationDegrees(swingAngle * 0.1f));
 
-        // Offset downward from shoulder point
         matrices.translate(0.0, -0.0625, 0.0);
 
         VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(texture));
         Matrix4f posMatrix = matrices.peek().getPositionMatrix();
 
-        // Cape quad: 0.625 x 1.0 blocks
         float w = 0.5f;
         float h = 1.0f;
 
