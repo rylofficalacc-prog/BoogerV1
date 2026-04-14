@@ -20,9 +20,9 @@ public class SpeedometerElement extends TextHudElement {
     protected String getValue(MinecraftClient client, float tickDelta) {
         if (client.player == null) return "0.00";
         PlayerEntity p = client.player;
-        double dx = p.getX() - p.prevX;
-        double dz = p.getZ() - p.prevZ;
-        double speed = Math.sqrt(dx * dx + dz * dz) * 20; // blocks/sec
+        double dx = p.getX() - p.lastRenderX;
+        double dz = p.getZ() - p.lastRenderZ;
+        double speed = Math.sqrt(dx * dx + dz * dz) * 20;
         String color = speed > 6 ? "§a" : speed > 4 ? "§e" : "§f";
         return color + String.format("%.2f", speed) + " §7b/s";
     }
