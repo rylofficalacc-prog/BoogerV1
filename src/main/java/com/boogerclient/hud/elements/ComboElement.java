@@ -11,10 +11,6 @@ public class ComboElement extends HudElement {
     private long lastHitTime = 0;
     private static final long COMBO_TIMEOUT_MS = 3000;
 
-    // Animation
-    private float displayScale = 1.0f;
-    private float targetScale = 1.0f;
-
     public ComboElement(float x, float y) {
         super("combo", "Combo", x, y);
     }
@@ -32,7 +28,6 @@ public class ComboElement extends HudElement {
             combo = 1;
         }
         lastHitTime = now;
-        targetScale = 1.3f; // pop animation trigger
     }
 
     public void resetCombo() { combo = 0; }
@@ -47,29 +42,17 @@ public class ComboElement extends HudElement {
             return;
         }
 
-        // Lerp scale back to 1.0
-        displayScale += (targetScale - displayScale) * 0.3f;
-        targetScale += (1.0f - targetScale) * 0.2f;
-
         int sw = client.getWindow().getScaledWidth();
         int sh = client.getWindow().getScaledHeight();
         int cx = (int)(x * sw);
         int cy = (int)(y * sh);
 
-        // Scale matrix
-        ctx.getMatrices().push();
-        ctx.getMatrices().translate(cx, cy, 0);
-        ctx.getMatrices().scale(displayScale, displayScale, 1.0f);
-
-        String comboText = "§f✦ " + combo + " HIT COMBO";
         String color = combo >= 20 ? "§c" : combo >= 10 ? "§e" : combo >= 5 ? "§a" : "§f";
         String text = color + combo + " §7Combo";
 
         int tw = client.textRenderer.getWidth(text);
-        ctx.fill(-tw/2 - 4, -2, tw/2 + 4, 12, 0x88000000);
-        ctx.drawText(client.textRenderer, text, -tw/2, 0, 0xFFFFFF, true);
-
-        ctx.getMatrices().pop();
+        ctx.fill(cx - tw/2 - 4, cy - 2, cx + tw/2 + 4, cy + 12, 0x88000000);
+        ctx.drawText(client.textRenderer, text, cx - tw/2, cy, 0xFFFFFF, true);
     }
 
     @Override
