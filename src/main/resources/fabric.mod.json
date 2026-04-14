@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "boogerclient",
+  "version": "${version}",
+  "name": "Booger Client",
+  "description": "High-performance Fabric client mod for 25w41a: HUD editor, PvP tools, cosmetics, and more.",
+  "authors": ["Booger Client Team"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.boogerclient.BoogerClient"]
+  },
+  "mixins": ["boogerclient.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "25w41a"
+  }
+}

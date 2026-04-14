@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.boogerclient.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "GameRendererMixin",
+    "InGameHudMixin",
+    "MouseMixin",
+    "PlayerEntityMixin",
+    "LivingEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
