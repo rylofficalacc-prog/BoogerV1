@@ -40,14 +40,14 @@ public class BoogerClient implements ClientModInitializer {
             "key.boogerclient.menu",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_RIGHT_SHIFT,
-            "category.boogerclient"
+            KeyBinding.MISC_CATEGORY
         ));
 
         toggleHudEditKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.boogerclient.hud_edit",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_F6,
-            "category.boogerclient"
+            KeyBinding.MISC_CATEGORY
         ));
 
         HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
